@@ -996,7 +996,7 @@
         </div>
             <div class="row">
           <div class="col-md-12 mb-2">
-            <form action="#" method="POST" class="p-5 bg-white">
+            <form name="submit-to-google-sheet" class="p-5 bg-white">
               <h2 class="h4 text-black mb-5">Contact Form</h2> 
 
               <div class="row form-group">
@@ -1023,7 +1023,7 @@
               <div class="row form-group">                
                 <div class="col-md-12">
                   <label class="text-black" for="subject">Subject</label> 
-                  <input type="subject" required id="subject" class="form-control">
+                  <input type="subject" required name="subject" class="form-control">
                 </div>
               </div>
 
@@ -1141,10 +1141,21 @@
   <script src="js/jquery.fancybox.min.js"></script>
   <script src="js/jquery.sticky.js"></script>
   <script src="js/isotope.pkgd.min.js"></script>
-
-  
   <script src="js/main.js"></script>
   <script src="js/script.js"></script>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwpZqpy6Ynvu1GKmHmBVUZz6Necew6m7dIzLS64NyXmyEUJ78xntTcqtguMRige_PYb8A/exec'
+    const form = document.forms['submit-to-google-sheet']
+  
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => alert("Submitted Successfully")
+        )
+        .catch(error => console.error('Error!', error.message))
+    })
+  </script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151945735-1"></script>
