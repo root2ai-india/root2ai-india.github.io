@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless Form</title>
+</head>
+<style>
+    #loader {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, .75) url(img/spinner.svg) no-repeat center center; //include your spinner url
+        z-index: 10000
+    }
+</style>
+<body>
+    <h2>HTML Forms</h2>
+
+    <form id="contactForm" name="serverless-form" method="POST">
+      <label for="fname">First name:</label>
+      <input type="text" id="fname" name="fname" value="John">
+      <label for="lname">Last name:</label>
+      <input type="text" id="lname" name="lname" value="Doe">
+      <input type="submit" value="Submit">
+    </form> 
+    
+</body>
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+<script>
+    var spinner = $('#loader');
+    const scriptURLC ='https://script.google.com/macros/s/AKfycbwpZqpy6Ynvu1GKmHmBVUZz6Necew6m7dIzLS64NyXmyEUJ78xntTcqtguMRige_PYb8A/exec'
+    const serverlessForm = document.forms['serverless-form'];
+
+    serverlessForm.addEventListener('submit', e => {
+        e.preventDefault();
+        spinner.show();
+
+
+        fetch(scriptURLC, {
+                method: 'POST',
+                body: new FormData(serverlessForm)
+            })
+            .then(res => {
+
+                console.log(res);
+                spinner.hide();
+
+                if (res['status'] == 200) {
+                    swal("Your form has been submitted!",
+                        "We will get back to you soon. Have a great day!", "success");
+                    return true;
+
+                } else {
+                    swal("Something went wrong!", "Please try after some time", "error");
+
+                }
+                document.getElementById('submitForm').classList.remove('loading');
+            })
+            .catch(error => {
+
+                swal("Something went wrong!", "Please try after some time", "error");
+                // todo enable submit button
+
+            })
+    });
+</script>
+</html>
